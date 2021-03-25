@@ -1,7 +1,24 @@
+import React, {useEffect} from "react";
+
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    getStatus();
+  }, []);
+
+  const getStatus = async () => {
+    try {
+      const res = await fetch("/api/data");
+      console.log(res);
+      const statusInfo = await res.json();
+      console.log(statusInfo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
