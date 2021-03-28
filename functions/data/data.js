@@ -1,5 +1,6 @@
 const formattedReturn = require('../_config/formattedReturn');
 const getStatus = require('./_operations/getStatus');
+require('dotenv').config();
 
 exports.handler =  async (event) => {
     if (event.httpMethod === 'GET') {

@@ -1,5 +1,8 @@
 # Getting Started with Create React App
 
+Run `npm i` in the root directory to install dependencies.
+
+Copy `.copyenv` and rename it to `.env`. Populate the fields with the appropriate data.
 
 ## Available Scripts
 
