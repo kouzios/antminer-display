@@ -1,19 +1,35 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
+import parse from 'html-react-parser';
 
-import logo from './logo.svg';
 import './App.css';
 
 const App = () => {
+  const [data, setData] = useState(<h1>Loading data from miner...</h1>);
+
   useEffect(() => {
     getStatus();
   }, []);
 
+  const customParse = (str) => {
+    let parser = new DOMParser();
+    let doc = parser.parseFromString(str, 'text/html');
+    console.log(doc.body);
+
+    const miner = doc.querySelector("#maincontainer").querySelector("#maincontent").
+      querySelector("#cbi-bmminerstatus").querySelectorAll("#cbi-table-table")[2];
+    console.log(miner);
+    console.log(miner.innerHTML);
+    
+    return miner.innerHTML;
+  }
+
   const getStatus = async () => {
     try {
       const res = await fetch("/api/data");
-      console.log(res);
-      const statusInfo = await res.json();
-      console.log(statusInfo);
+      let statusInfo = await res.text();
+      statusInfo = statusInfo.replaceAll("&quot;", "\"");
+      statusInfo = statusInfo.replaceAll("&#10;", "\n");
+      setData(parse(customParse(statusInfo))); 
     } catch (err) {
       console.log(err);
     }
@@ -21,20 +37,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {data}
     </div>
   );
 }
